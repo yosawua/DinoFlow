@@ -46,6 +46,7 @@ services:
       NODE_ENV: production
       DATABASE_URL: postgresql://postgres:postgrespassword@timescaledb:5432/dinoflow
       MQTT_BROKER_URL: mqtt://mosquitto:1883
+      SIMULATOR_CONTROL_URL: ${SIMULATOR_CONTROL_URL:-http://localhost:3002}
       GEMINI_API_KEY: ${GEMINI_API_KEY:-}
       ELEVENLABS_API_KEY: ${ELEVENLABS_API_KEY:-}
       ELEVENLABS_VOICE_ID: ${ELEVENLABS_VOICE_ID:-21m00Tcm4TlvDq8ikWAM}

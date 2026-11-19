@@ -37,16 +37,24 @@ class MqttSubscriber {
       });
 
       this.client.on('message', async (topic, message) => {
+        let payload;
         try {
-          const payload = JSON.parse(message.toString());
+          payload = JSON.parse(message.toString());
+        } catch (err) {
+          console.warn('Invalid MQTT telemetry JSON:', err.message);
+          return;
+        }
+
+        try {
           await this.processTelemetry(payload);
         } catch (err) {
-          // ignore corrupted JSON
+          console.error('Failed to process MQTT telemetry:', err.message);
         }
       });
 
       this.client.on('error', (err) => {
         this.isConnected = false;
+        console.error('MQTT client error:', err.message);
       });
 
       this.client.on('offline', () => {

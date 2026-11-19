@@ -85,6 +85,7 @@ class ApiService {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ status })
     });
+    if (!res.ok) throw new Error(`API request failed (${res.status})`);
     return res.json();
   }
 
@@ -92,6 +93,7 @@ class ApiService {
     const res = await fetch(`${API_BASE}/ai/explain-alert/${alertId}`, {
       method: 'POST'
     });
+    if (!res.ok) throw new Error(`API request failed (${res.status})`);
     return res.json();
   }
 
@@ -99,6 +101,7 @@ class ApiService {
     const res = await fetch(`${API_BASE}/ai/daily-report`, {
       method: 'POST'
     });
+    if (!res.ok) throw new Error(`API request failed (${res.status})`);
     return res.json();
   }
 
@@ -108,6 +111,7 @@ class ApiService {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ scenario })
     });
+    if (!res.ok) throw new Error(`API request failed (${res.status})`);
     return res.json();
   }
 
@@ -117,6 +121,7 @@ class ApiService {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload)
     });
+    if (!res.ok) throw new Error(`API request failed (${res.status})`);
     return res.json();
   }
 

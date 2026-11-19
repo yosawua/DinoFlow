@@ -39,10 +39,14 @@ router.post('/scenario', (req, res) => {
       },
       timeout: 1000
     }, (clientRes) => {});
-    clientReq.on('error', () => {});
+    clientReq.on('error', (err) => {
+      console.warn('Simulator control request failed:', err.message);
+    });
     clientReq.write(postData);
     clientReq.end();
-  } catch (e) {}
+  } catch (err) {
+    console.warn('Unable to create simulator control request:', err.message);
+  }
 
   eventHub.broadcast('scenario_changed', { scenario });
   console.log(`🎮 Simulator scenario switched to: [${scenario.toUpperCase()}]`);
