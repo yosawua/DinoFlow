@@ -1,0 +1,78 @@
+services:
+  # 1. TimescaleDB (Time-series PostgreSQL engine)
+  timescaledb:
+    image: timescale/timescaledb:latest-pg16
+    container_name: dinoflow-timescale
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgrespassword
+      POSTGRES_DB: dinoflow
+    ports:
+      - "5432:5432"
+    volumes:
+      - timescale_data:/var/lib/postgresql/data
+      - ../timescale/init.sql:/docker-entrypoint-initdb.d/init.sql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d dinoflow"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  # 2. Mosquitto MQTT Broker (Local message bus)
+  mosquitto:
+    image: eclipse-mosquitto:2.0
+    container_name: dinoflow-mqtt
+    restart: unless-stopped
+    ports:
+      - "1883:1883"
+      - "9001:9001"
+    volumes:
+      - ./mosquitto.conf:/mosquitto/config/mosquitto.conf
+      - mosquitto_data:/mosquitto/data
+      - mosquitto_log:/mosquitto/log
+
+  # 3. DinoFlow API & Detection Engine
+  api:
+    build:
+      context: ../../apps/api
+      dockerfile: Dockerfile
+    container_name: dinoflow-api
+    restart: unless-stopped
+    ports:
+      - "3001:3001"
+    environment:
+      PORT: 3001
+      NODE_ENV: production
+      DATABASE_URL: postgresql://postgres:postgrespassword@timescaledb:5432/dinoflow
+      MQTT_BROKER_URL: mqtt://mosquitto:1883
+      GEMINI_API_KEY: ${GEMINI_API_KEY:-}
+      ELEVENLABS_API_KEY: ${ELEVENLABS_API_KEY:-}
+      ELEVENLABS_VOICE_ID: ${ELEVENLABS_VOICE_ID:-21m00Tcm4TlvDq8ikWAM}
+      WATER_COST_PER_M3: 25.5
+      DEFAULT_CURRENCY: MXN
+    depends_on:
+      timescaledb:
+        condition: service_healthy
+      mosquitto:
+        condition: service_started
+
+  # 4. DinoFlow PWA Frontend
+  web:
+    build:
+      context: ../../apps/web
+      dockerfile: Dockerfile
+    container_name: dinoflow-web
+    restart: unless-stopped
+    ports:
+      - "5173:80"
+    environment:
+      VITE_API_URL: http://localhost:3001
+      VITE_MQTT_WS_URL: ws://localhost:9001
+    depends_on:
+      - api
+
+volumes:
+  timescale_data:
+  mosquitto_data:
+  mosquitto_log:

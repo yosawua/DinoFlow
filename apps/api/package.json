@@ -1,0 +1,20 @@
+{
+  "name": "dinoflow-api",
+  "version": "1.0.0",
+  "description": "DinoFlow IoT Water Management Backend, Real-Time Engine and Detection System",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "node --watch src/server.js",
+    "test": "node --test tests/**/*.test.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "mqtt": "^5.10.4",
+    "pg": "^8.13.3",
+    "uuid": "^11.1.0",
+    "ws": "^8.18.1"
+  }
+}
