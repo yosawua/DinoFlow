@@ -1,0 +1,100 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --bg-primary: #070d1e;
+  --bg-secondary: #0d1a36;
+  --bg-card: rgba(15, 29, 60, 0.75);
+  --border-card: rgba(56, 189, 248, 0.15);
+  --text-main: #f1f5f9;
+  --text-muted: #94a3b8;
+  --accent-cyan: #0ea5e9;
+  --accent-teal: #14b8a6;
+  --status-normal: #10b981;
+  --status-warning: #f59e0b;
+  --status-urgent: #ef4444;
+}
+
+.light-theme {
+  --bg-primary: #f0f7ff;
+  --bg-secondary: #ffffff;
+  --bg-card: rgba(255, 255, 255, 0.9);
+  --border-card: rgba(14, 165, 233, 0.2);
+  --text-main: #0f172a;
+  --text-muted: #475569;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+}
+
+body {
+  background-color: var(--bg-primary);
+  color: var(--text-main);
+  min-height: 100vh;
+  overflow-x: hidden;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Glassmorphism Card Style */
+.glass-card {
+  background: var(--bg-card);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--border-card);
+  border-radius: 16px;
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.25);
+  transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.glass-card:hover {
+  border-color: rgba(56, 189, 248, 0.35);
+  box-shadow: 0 12px 36px 0 rgba(14, 165, 233, 0.15);
+}
+
+/* Water Flow Animation for Hydraulic Pipes */
+@keyframes waterFlow {
+  0% { stroke-dashoffset: 40; }
+  100% { stroke-dashoffset: 0; }
+}
+
+.pipe-water-active {
+  stroke-dasharray: 8 6;
+  animation: waterFlow 1.2s linear infinite;
+}
+
+.pipe-water-urgent {
+  stroke-dasharray: 6 4;
+  animation: waterFlow 0.4s linear infinite;
+}
+
+/* Alert Pulsing Glow */
+@keyframes alertPulse {
+  0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.6); }
+  70% { box-shadow: 0 0 0 16px rgba(239, 68, 68, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
+}
+
+.alert-pulse-urgent {
+  animation: alertPulse 1.8s infinite;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.1);
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(56, 189, 248, 0.3);
+  border-radius: 999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(56, 189, 248, 0.6);
+}
